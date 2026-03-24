@@ -1,0 +1,35 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('orders', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->restrictOnDelete();
+            $table->string('order_number')->unique();
+            $table->unsignedBigInteger('total_cents');
+            $table->string('status', 30)->default('placed')->index();
+            $table->json('items_snapshot');
+            $table->timestamp('placed_at');
+            $table->timestamps();
+
+            $table->index(['user_id', 'created_at']);
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('orders');
+    }
+};
