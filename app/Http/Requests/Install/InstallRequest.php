@@ -26,6 +26,7 @@ class InstallRequest extends FormRequest
             'admin_name' => ['required', 'string', 'max:255'],
             'admin_email' => ['required', 'email', 'max:255'],
             'admin_password' => ['required', 'string', 'min:8', 'confirmed'],
+            'install_mode' => ['required', 'in:demo,simple'],
             'install_token' => ['required', 'string'],
         ];
     }

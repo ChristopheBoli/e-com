@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Exceptions\CheckoutException;
+use App\Models\Order;
 use App\Models\Product;
 use App\Repositories\Contracts\CartRepositoryInterface;
 use App\Repositories\Contracts\OrderRepositoryInterface;
@@ -71,12 +72,16 @@ class OrderService
                 'user_id' => $userId,
                 'order_number' => $this->generateUniqueOrderNumber(),
                 'total_cents' => $totalCents,
-                'status' => 'placed',
+                'status' => Order::STATUS_PENDING,
                 'items_snapshot' => $snapshotItems,
                 'placed_at' => now(),
             ]);
 
+            $order->status = Order::STATUS_PAID;
+            $order->save();
+
             $this->carts->clearItems($cart);
+            $this->carts->complete($cart);
 
             return [
                 'order_id' => $order->id,

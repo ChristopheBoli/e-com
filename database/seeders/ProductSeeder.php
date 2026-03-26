@@ -12,6 +12,10 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
+        if (! (bool) config('install.seed.with_demo_products', true)) {
+            return;
+        }
+
         Product::factory()->count(10)->create();
     }
 }

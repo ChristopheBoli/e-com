@@ -13,15 +13,23 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
+        $adminEmail = (string) (config('install.seed.admin_email') ?? 'admin@example.com');
+        $adminName = (string) (config('install.seed.admin_name') ?? 'Admin User');
+        $adminPassword = (string) (config('install.seed.admin_password') ?? 'adminpassword');
+
         User::query()->updateOrCreate(
-            ['email' => 'admin@example.com'],
+            ['email' => $adminEmail],
             [
-                'name' => 'Admin User',
-                'password' => Hash::make('adminpassword'),
+                'name' => $adminName,
+                'password' => Hash::make($adminPassword),
                 'role' => User::ROLE_ADMIN,
                 'email_verified_at' => now(),
             ]
         );
+
+        if (! (bool) config('install.seed.with_demo_user', true)) {
+            return;
+        }
 
         User::query()->updateOrCreate(
             ['email' => 'user@example.com'],

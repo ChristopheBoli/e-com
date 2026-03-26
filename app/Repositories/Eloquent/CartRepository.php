@@ -10,9 +10,15 @@ class CartRepository implements CartRepositoryInterface
 {
     public function getOrCreateForUser(int $userId): Cart
     {
-        return Cart::query()->firstOrCreate([
-            'user_id' => $userId,
-        ]);
+        return Cart::query()->firstOrCreate(
+            [
+                'user_id' => $userId,
+                'status' => Cart::STATUS_ACTIVE,
+            ],
+            [
+                'status' => Cart::STATUS_ACTIVE,
+            ]
+        );
     }
 
     public function getForUserWithItems(int $userId): Cart
@@ -47,5 +53,13 @@ class CartRepository implements CartRepositoryInterface
     public function clearItems(Cart $cart): void
     {
         $cart->items()->delete();
+    }
+
+    public function complete(Cart $cart): Cart
+    {
+        $cart->status = Cart::STATUS_COMPLETED;
+        $cart->save();
+
+        return $cart->refresh();
     }
 }

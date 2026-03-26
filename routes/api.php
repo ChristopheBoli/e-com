@@ -25,6 +25,11 @@ Route::prefix('products')->group(function (): void {
 Route::middleware('auth:api')->group(function (): void {
     Route::prefix('cart')->group(function (): void {
         Route::get('/', [CartController::class, 'show']);
+
+        Route::post('add', [CartController::class, 'add']);
+        Route::put('update', [CartController::class, 'updateQuantity']);
+        Route::delete('remove', [CartController::class, 'remove']);
+
         Route::post('items', [CartController::class, 'add']);
         Route::patch('items', [CartController::class, 'updateQuantity']);
         Route::delete('items', [CartController::class, 'remove']);

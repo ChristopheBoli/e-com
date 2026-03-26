@@ -38,7 +38,12 @@ class User extends Authenticatable implements JWTSubject
 
     public function cart(): HasOne
     {
-        return $this->hasOne(Cart::class);
+        return $this->hasOne(Cart::class)->where('status', Cart::STATUS_ACTIVE)->latestOfMany();
+    }
+
+    public function carts(): HasMany
+    {
+        return $this->hasMany(Cart::class);
     }
 
     public function orders(): HasMany

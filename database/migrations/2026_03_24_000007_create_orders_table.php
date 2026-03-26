@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->restrictOnDelete();
             $table->string('order_number')->unique();
             $table->unsignedBigInteger('total_cents');
-            $table->string('status', 30)->default('placed')->index();
+            $table->string('status', 30)->default('pending')->index();
             $table->json('items_snapshot');
             $table->timestamp('placed_at');
             $table->timestamps();

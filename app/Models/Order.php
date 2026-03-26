@@ -10,6 +10,10 @@ class Order extends Model
 {
     use HasFactory;
 
+    public const STATUS_PENDING = 'pending';
+
+    public const STATUS_PAID = 'paid';
+
     /**
      * @var list<string>
      */
@@ -29,6 +33,7 @@ class Order extends Model
         'total_cents' => 'integer',
         'items_snapshot' => 'array',
         'placed_at' => 'datetime',
+        'status' => 'string',
     ];
 
     public function user(): BelongsTo

@@ -11,11 +11,23 @@ class Cart extends Model
 {
     use HasFactory;
 
+    public const STATUS_ACTIVE = 'active';
+
+    public const STATUS_COMPLETED = 'completed';
+
     /**
      * @var list<string>
      */
     protected $fillable = [
         'user_id',
+        'status',
+    ];
+
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'status' => 'string',
     ];
 
     public function user(): BelongsTo
