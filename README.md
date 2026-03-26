@@ -67,6 +67,7 @@ http://localhost:8000/install
 - Génère `APP_KEY` (si non existant)
 - Génère `JWT_SECRET` (si non existant)
 - Exécute les migrations Laravel
+- Exécute `php artisan storage:link --force` pour rendre les fichiers publics accessibles
 - Exécute les seeders selon le mode choisi
 - Crée les comptes administrateurs (deux admins, un admin automatique et un admin avec les identifiants saisis)
 - Crée le fichier de verrou `storage/app/install.lock`
@@ -115,10 +116,11 @@ php artisan key:generate
 php artisan jwt:secret --force
 ```
 
-4. **Migrez et peuplez la base de données:**
+4. **Migrez, créez le lien de stockage et peuplez la base de données:**
 
 ```bash
 php artisan migrate --seed
+php artisan storage:link --force
 ```
 
 ## Configuration de l'Installateur
@@ -472,3 +474,6 @@ Pour toute question ou problème de configuration, n'hésitez pas à me contacte
 
 
   L'install auto doit aussi faire le storage link
+
+    feat(app): Système d'installation:
+  - Ajouter storage:link automatique pendant l'installation

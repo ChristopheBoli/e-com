@@ -53,6 +53,9 @@ class InstallService
             $this->setStatus('running', 'Migration de la base de données...', 70, 3);
             $this->runArtisan('migrate', ['--force' => true]);
 
+            $this->setStatus('running', 'Configuration des liens de stockage...', 78, 3);
+            $this->runArtisan('storage:link', ['--force' => true]);
+
             $this->setStatus('running', 'Injection des données...', 84, 4);
             $summary = $this->seedAccordingToMode($data);
 
