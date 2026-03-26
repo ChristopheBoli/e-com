@@ -239,7 +239,6 @@
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo">↺</div>
             <h1>Réinitialiser l'installation</h1>
         </div>
 
@@ -295,7 +294,7 @@
                 </div>
             @endif
 
-            <div class="form-section">
+            <!-- <div class="form-section">
                 <h3>📝 Informations conservées</h3>
                 <p style="color: #718096; font-size: 14px; margin: 8px 0;">
                     Les éléments suivants seront conservés (sauf si l'option ci-dessous est cochée) :
@@ -305,7 +304,7 @@
                     <li>Tables de la base de données</li>
                     <li>Fichiers de logs</li>
                 </ul>
-            </div>
+            </div> -->
 
             <form id="resetForm" method="POST" action="{{ route('reset-install.run') }}">
                 @csrf
@@ -322,7 +321,7 @@
 
                     <div id="dbWarning" class="box warning-box hidden">
                         <strong>⚠️ Attention</strong>
-                        <p>Toutes les tables de la base de données seront supprimées. Cette action est irréversible.</p>
+                        <p>Toutes les données seront supprimées. Cette action est irréversible.</p>
                     </div>
                 </div>
 

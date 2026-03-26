@@ -8,9 +8,9 @@ use Illuminate\Support\Collection;
 
 interface ProductRepositoryInterface
 {
-    public function paginateActive(int $perPage = 15): LengthAwarePaginator;
+    public function paginateActive(int $perPage = 15, ?string $search = null): LengthAwarePaginator;
 
-    public function paginateAll(int $perPage = 15): LengthAwarePaginator;
+    public function paginateAll(int $perPage = 15, ?string $search = null, ?bool $isActive = null): LengthAwarePaginator;
 
     public function findById(int $id): ?Product;
 
@@ -28,4 +28,6 @@ interface ProductRepositoryInterface
     public function findManyForUpdate(array $productIds): Collection;
 
     public function decrementStock(Product $product, int $quantity): void;
+
+    public function updateStock(Product $product, int $stockQuantity): Product;
 }

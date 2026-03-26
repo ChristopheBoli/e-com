@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Concerns\ApiResponse;
 use App\Http\Controllers\Controller;
 use App\Services\ProductService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
@@ -16,10 +17,13 @@ class ProductController extends Controller
     ) {
     }
 
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
+        $perPage = (int) $request->integer('per_page', 15);
+        $search = $request->string('search')->toString();
+
         return $this->success(
-            $this->productService->listPublic(),
+            $this->productService->listPublic($perPage, $search !== '' ? $search : null),
             'Produits actifs récupérés.'
         );
     }

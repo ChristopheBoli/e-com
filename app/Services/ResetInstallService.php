@@ -5,8 +5,8 @@ namespace App\Services;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Schema;
 use RuntimeException;
+use Throwable;
 
 class ResetInstallService
 {
@@ -21,7 +21,6 @@ class ResetInstallService
         try {
             $this->assertResetAllowed();
 
-            // Supprimer les tables AVANT de modifier .env pour éviter que le serveur redémarre pendant l'opération
             if (! empty($data['drop_database'])) {
                 $this->logInfo('[reset] step_drop_tables');
                 $this->dropDatabaseTables();
@@ -29,9 +28,6 @@ class ResetInstallService
 
             $this->logInfo('[reset] step_delete_locks');
             $this->deleteLockFiles();
-
-            $this->logInfo('[reset] step_reset_env');
-            $this->resetEnvironmentVariable();
 
             $this->logInfo('[reset] step_clear_cache');
             $this->clearCache();
@@ -49,6 +45,30 @@ class ResetInstallService
                 : 'Erreur inattendue pendant la réinitialisation.';
 
             $this->logError('[reset] run_error', [
+                'message' => $message,
+                'exception_class' => $exception::class,
+                'file' => $exception->getFile(),
+                'line' => $exception->getLine(),
+            ]);
+
+            throw new RuntimeException($message, 0, $exception);
+        }
+    }
+
+    public function finalizeEnvironmentForInstall(): void
+    {
+        $this->logInfo('[reset] finalize_start');
+
+        try {
+            $this->assertResetAllowed();
+            $this->resetEnvironmentVariable();
+            $this->logInfo('[reset] finalize_success');
+        } catch (Throwable $exception) {
+            $message = $exception->getMessage() !== ''
+                ? $exception->getMessage()
+                : 'Erreur inattendue pendant la finalisation.';
+
+            $this->logError('[reset] finalize_error', [
                 'message' => $message,
                 'exception_class' => $exception::class,
                 'file' => $exception->getFile(),
@@ -116,11 +136,9 @@ class ResetInstallService
             throw new RuntimeException('Impossible d\'écrire dans le fichier .env');
         }
 
-        // Reload environment
-        app()->loadEnvironmentFrom('.env');
         putenv('APP_INSTALLED=false');
-        $_ENV['APP_INSTALLED'] = false;
-        $_SERVER['APP_INSTALLED'] = false;
+        $_ENV['APP_INSTALLED'] = 'false';
+        $_SERVER['APP_INSTALLED'] = 'false';
 
         $this->logInfo('[reset] env_reset');
     }
@@ -128,7 +146,6 @@ class ResetInstallService
     private function dropDatabaseTables(): void
     {
         try {
-            // Vérifier d'abord s'il y a des tables
             $connection = DB::connection();
             $databaseName = $connection->getDatabaseName();
 
@@ -137,9 +154,6 @@ class ResetInstallService
                 return;
             }
 
-            // Utiliser migrate:fresh pour supprimer et recréer les tables proprement
-            // --force pour forcer en production
-            // --seed=false pour ne pas exécuter les seeders
             $exitCode = Artisan::call('migrate:fresh', [
                 '--force' => true,
                 '--seed' => false,
@@ -166,7 +180,6 @@ class ResetInstallService
 
             $this->logInfo('[reset] cache_cleared');
         } catch (Throwable $exception) {
-            // Ne pas bloquer la réinitialisation si le cache échoue
             $this->logError('[reset] cache_clear_warning', [
                 'message' => $exception->getMessage(),
             ]);

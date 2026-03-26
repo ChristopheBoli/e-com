@@ -18,4 +18,7 @@ Route::middleware('install.allowed')->group(function (): void {
 
 Route::get('/reset-install', [ResetInstallController::class, 'show'])->name('reset-install.show');
 Route::post('/reset-install', [ResetInstallController::class, 'reset'])->name('reset-install.run');
+Route::post('/reset-install/finalize', [ResetInstallController::class, 'finalize'])->name('reset-install.finalize');
+Route::get('/reset-install/restart', [ResetInstallController::class, 'restart'])->name('reset-install.restart');
 Route::get('/reset-install/done', [ResetInstallController::class, 'done'])->name('reset-install.done');
+

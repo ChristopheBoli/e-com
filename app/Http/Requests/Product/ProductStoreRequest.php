@@ -23,6 +23,7 @@ class ProductStoreRequest extends FormRequest
             'price_cents' => ['required', 'integer', 'min:1'],
             'stock_quantity' => ['required', 'integer', 'min:0'],
             'is_active' => ['sometimes', 'boolean'],
+            'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
         ];
     }
 }

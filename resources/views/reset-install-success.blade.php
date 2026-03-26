@@ -21,14 +21,11 @@
             border-radius: 16px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             width: 100%;
-            max-width: 500px;
+            max-width: 520px;
             padding: 40px;
         }
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .header .logo {
+        .header { text-align: center; margin-bottom: 24px; }
+        .logo {
             width: 80px;
             height: 80px;
             background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
@@ -36,232 +33,128 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px;
+            margin: 0 auto 16px;
             color: white;
             font-size: 40px;
         }
-        .header h1 {
-            margin: 0 0 8px;
-            color: #2d3748;
-            font-size: 26px;
-            font-weight: 700;
-        }
-        .header p {
-            margin: 0;
-            color: #718096;
-            font-size: 14px;
-        }
-        .box {
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-        }
-        .success-box {
-            background: #f0fff4;
-            border: 1px solid #9ae6b4;
-        }
-        .success-box strong {
-            display: block;
-            margin-bottom: 8px;
-            color: #22543d;
-            font-weight: 600;
-            font-size: 16px;
-        }
-        .success-box p {
-            color: #276749;
-            font-size: 14px;
-            margin: 4px 0;
-        }
-        .info-box {
-            background: #ebf8ff;
-            border: 1px solid #bee3f8;
-        }
-        .info-box strong {
-            display: block;
-            margin-bottom: 12px;
-            color: #2c5282;
-            font-weight: 600;
-        }
-        .info-box ul {
-            margin: 8px 0 8px 20px;
-            padding: 0;
-            color: #2b6cb0;
-            font-size: 14px;
-        }
-        .info-box li {
-            margin: 6px 0;
-        }
-        .button-group {
-            display: flex;
-            gap: 12px;
-            margin-top: 30px;
-        }
+        h1 { margin: 0 0 8px; color: #2d3748; font-size: 26px; }
+        .muted { color: #718096; margin: 0; }
+        .box { padding: 16px; border-radius: 10px; margin: 14px 0; }
+        .ok { background: #f0fff4; border: 1px solid #9ae6b4; color: #22543d; }
+        .err { background: #fff5f5; border: 1px solid #fc8181; color: #9b2c2c; }
+        .info { background: #ebf8ff; border: 1px solid #bee3f8; color: #2b6cb0; }
+        ul { margin: 8px 0 0 18px; }
+        .actions { display: grid; gap: 10px; margin-top: 20px; }
         .button {
-            flex: 1;
-            padding: 14px 24px;
-            color: white;
-            text-decoration: none;
+            width: 100%;
+            padding: 14px 20px;
+            border: none;
             border-radius: 8px;
             font-weight: 600;
+            cursor: pointer;
+            color: #fff;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .button:disabled { opacity: .7; cursor: not-allowed; }
+        a.button-link {
+            text-decoration: none;
             text-align: center;
-            transition: all 0.2s;
-            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
-        }
-        .button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-        }
-        .button-primary {
-            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-        }
-        .button-secondary {
+            display: inline-block;
+            width: 100%;
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: #fff;
             background: #718096;
+            font-weight: 600;
         }
         .hidden { display: none !important; }
-        .code {
-            background: #2d3748;
-            color: #faf089;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 13px;
-        }
-        @media (max-width: 640px) {
-            .container {
-                padding: 24px;
-            }
-            .header h1 {
-                font-size: 22px;
-            }
-            .button-group {
-                flex-direction: column;
-            }
-        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div id="install-ready" class="hidden">
-            <div class="header">
-                <div class="logo">✓</div>
-                <h1>Réinitialisation réussie !</h1>
-                <p>L'application est prête pour une nouvelle installation</p>
-            </div>
-
-            <div class="box success-box">
-                <strong>🎉 Installation réinitialisée</strong>
-                <p>Tous les verrous ont été supprimés et l'application peut être réinstallée.</p>
-            </div>
-
-            <div class="box info-box">
-                <strong>📋 Actions effectuées :</strong>
-                <ul>
-                    <li>✓ Fichier de verrou d'installation supprimé</li>
-                    <li>✓ Fichier de statut d'installation supprimé</li>
-                    <li>✓ Variable <code>APP_INSTALLED</code> définie à <code>false</code></li>
-                    <li>✓ Cache de l'application nettoyé</li>
-                </ul>
-            </div>
-
-            <div class="box info-box">
-                <strong>🚀 Étapes suivantes :</strong>
-                <ul>
-                    <li>Cliquez sur le bouton ci-dessous</li>
-                    <li>Configurez votre base de données</li>
-                    <li>Créez votre compte administrateur</li>
-                </ul>
-            </div>
-
-            <div class="button-group">
-                <a href="{{ route('install.show') }}" class="button button-primary">Lancer l'installation →</a>
-                <a href="/" class="button button-secondary">Accueil</a>
-            </div>
-
-            <p style="text-align: center; color: #718096; font-size: 12px; margin-top: 30px;">
-                En cas de problème, consultez <code>storage/logs/laravel.log</code>
-            </p>
-        </div>
-
-        <div id="server-restarting">
-            <div class="header">
-                <div class="logo" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">⟳</div>
-                <h1>Redémarrage<span id="dots"></span></h1>
-                <p>Le serveur redémarre suite à la modification</p>
-            </div>
-
-            <div class="box info-box">
-                <p id="status">Veuillez patienter...</p>
-                <p id="timeout-warning" class="hidden" style="color: #dd6b20; margin-top: 12px;">
-                    Le serveur prend plus de temps que prévu.
-                </p>
-            </div>
-        </div>
+<div class="container">
+    <div class="header">
+        <div class="logo">✓</div>
+        <h1>Réinitialisation réussie</h1>
+        <p class="muted">Les opérations de reset sont terminées.</p>
     </div>
 
-    <script>
-        const installReady = document.getElementById('install-ready');
-        const serverRestarting = document.getElementById('server-restarting');
-        const status = document.getElementById('status');
-        const timeoutWarning = document.getElementById('timeout-warning');
-        const dots = document.getElementById('dots');
+    @if (!empty($finalizeError))
+        <div class="box err">
+            <strong>Finalisation échouée :</strong>
+            <p>{{ $finalizeError }}</p>
+        </div>
+    @endif
 
-        // Animation des points
-        let dotCount = 0;
-        setInterval(() => {
-            dotCount = (dotCount + 1) % 4;
-            dots.textContent = '.'.repeat(dotCount);
-        }, 500);
+    <div class="box ok">
+        <strong>Actions déjà effectuées</strong>
+        <ul>
+            <li>Suppression des verrous d'installation</li>
+            <li>Nettoyage de l'état de reset</li>
+            <li>Nettoyage du cache</li>
+            <li>Suppression DB (si demandée)</li>
+        </ul>
+    </div>
 
-        // Vérifier si /install est accessible (ce qui signifie que le serveur a redémarré)
-        function checkInstallReady() {
-            return fetch('{{ route('install.show') }}', {
-                method: 'HEAD',
-                cache: 'no-store',
-            })
-                .then(response => {
-                    // Si on obtient une réponse 200 ou 302, le serveur est prêt
-                    return response.ok || response.redirected || response.status === 302;
-                })
-                .catch(() => false);
-        }
+    <div class="box info">
+        <strong>Étape suivante</strong>
+        <p>Cliquez sur « Continuer vers installation » pour finaliser l'environnement. Cette action modifie `.env`, peut redémarrer le serveur, puis vous redirige automatiquement vers `/install`.</p>
+    </div>
 
-        async function waitForServer() {
-            let attempts = 0;
-            const maxAttempts = 30;
-            const interval = 500;
+    <div id="finalizeError" class="box err hidden"></div>
 
-            while (attempts < maxAttempts) {
-                attempts++;
-                status.textContent = `Vérification... (${attempts}/${maxAttempts})`;
+    <div class="actions">
+        <form id="finalizeForm" method="POST" action="{{ route('reset-install.finalize') }}">
+            @csrf
+            <button id="finalizeBtn" type="submit" class="button">Continuer vers installation</button>
+        </form>
+        <a href="/" class="button-link">Retour accueil</a>
+    </div>
+</div>
 
-                const ready = await checkInstallReady();
-                if (ready) {
-                    // Le serveur est prêt, on affiche le contenu normal
-                    serverRestarting.classList.add('hidden');
-                    installReady.classList.remove('hidden');
-                    return;
-                }
+<script>
+    const form = document.getElementById('finalizeForm');
+    const btn = document.getElementById('finalizeBtn');
+    const errorBox = document.getElementById('finalizeError');
+    const restartUrl = @json(route('reset-install.restart'));
 
-                await new Promise(resolve => setTimeout(resolve, interval));
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        errorBox.classList.add('hidden');
+        errorBox.textContent = '';
+
+        btn.disabled = true;
+        btn.textContent = 'Finalisation en cours...';
+
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': form.querySelector('input[name="_token"]').value,
+                },
+            });
+
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || 'Erreur pendant la finalisation.');
             }
 
-            // Timeout - on affiche quand même le contenu avec un avertissement
-            timeoutWarning.classList.remove('hidden');
-            status.textContent = 'Le serveur semble prêt.';
-            serverRestarting.classList.add('hidden');
-            installReady.classList.remove('hidden');
-        }
-
-        // Commencer par vérifier une fois
-        checkInstallReady().then(ready => {
-            if (ready) {
-                // Le serveur est déjà prêt
-                serverRestarting.classList.add('hidden');
-                installReady.classList.remove('hidden');
-            } else {
-                // Le serveur redémarre encore
-                waitForServer();
+            window.location.href = restartUrl;
+        } catch (error) {
+            if (error instanceof TypeError) {
+                // probable redémarrage immédiat: bascule vers page de recovery
+                window.location.href = restartUrl;
+                return;
             }
-        });
-    </script>
+
+            errorBox.textContent = error.message || 'Erreur inattendue.';
+            errorBox.classList.remove('hidden');
+            btn.disabled = false;
+            btn.textContent = 'Continuer vers installation';
+        }
+    });
+</script>
 </body>
 </html>

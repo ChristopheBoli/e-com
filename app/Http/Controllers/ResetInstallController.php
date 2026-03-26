@@ -6,6 +6,7 @@ use App\Http\Requests\ResetInstallRequest;
 use App\Services\ResetInstallService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -21,10 +22,9 @@ class ResetInstallController extends Controller
 
     public function show(): View
     {
-        $isInstalled = filter_var(env('APP_INSTALLED', false), FILTER_VALIDATE_BOOL);
         $lockExists = file_exists(storage_path('app/install.lock'));
 
-        if (! $isInstalled && ! $lockExists) {
+        if (! $lockExists) {
             return view('reset-install', [
                 'notInstalled' => true,
             ]);
@@ -69,15 +69,11 @@ class ResetInstallController extends Controller
                     'message' => 'Réinitialisation terminée avec succès.',
                     'redirect' => route('reset-install.done'),
                     'dropped_database' => $result['dropped_database'] ?? false,
-                    'server_restart' => true,
+                    'next' => route('reset-install.finalize'),
                 ]);
             }
 
-            // Le serveur va redémarrer suite à la modification du .env
-            // On renvoie une page HTML avec JavaScript qui redirige automatiquement
-            return response(view('reset-restart', [
-                'redirect_url' => route('reset-install.done'),
-            ]))->header('Content-Type', 'text/html');
+            return redirect()->route('reset-install.done');
         } catch (RuntimeException $exception) {
             Log::channel('stderr')->warning('[reset] runtime_error', [
                 'reset_id' => $resetId,
@@ -129,6 +125,55 @@ class ResetInstallController extends Controller
                     'reset' => 'Erreur inattendue pendant la réinitialisation. Consulte storage/logs/laravel.log.',
                 ]);
         }
+    }
+
+    public function finalize(Request $request): JsonResponse|View
+    {
+        try {
+            $this->resetInstallService->finalizeEnvironmentForInstall();
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Finalisation terminée. Redémarrage du serveur...',
+                    'redirect' => route('install.show'),
+                    'server_restart' => true,
+                ]);
+            }
+
+            return view('reset-restart', [
+                'redirect_url' => route('install.show'),
+            ]);
+        } catch (RuntimeException $exception) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $exception->getMessage(),
+                ], 422);
+            }
+
+            return view('reset-install-success', [
+                'finalizeError' => $exception->getMessage(),
+            ]);
+        } catch (Throwable $exception) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Erreur inattendue pendant la finalisation. Consulte storage/logs/laravel.log.',
+                ], 500);
+            }
+
+            return view('reset-install-success', [
+                'finalizeError' => 'Erreur inattendue pendant la finalisation. Consulte storage/logs/laravel.log.',
+            ]);
+        }
+    }
+
+    public function restart(): View
+    {
+        return view('reset-restart', [
+            'redirect_url' => route('install.show'),
+        ]);
     }
 
     public function done(): View

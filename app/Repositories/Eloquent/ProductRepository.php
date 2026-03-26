@@ -5,21 +5,41 @@ namespace App\Repositories\Eloquent;
 use App\Models\Product;
 use App\Repositories\Contracts\ProductRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 
 class ProductRepository implements ProductRepositoryInterface
 {
-    public function paginateActive(int $perPage = 15): LengthAwarePaginator
+    public function paginateActive(int $perPage = 15, ?string $search = null): LengthAwarePaginator
     {
         return Product::query()
             ->active()
+            ->when($search !== null && $search !== '', function (Builder $query) use ($search): void {
+                $query->where(function (Builder $subQuery) use ($search): void {
+                    $subQuery
+                        ->where('name', 'like', "%{$search}%")
+                        ->orWhere('sku', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%");
+                });
+            })
             ->orderBy('name')
             ->paginate($perPage);
     }
 
-    public function paginateAll(int $perPage = 15): LengthAwarePaginator
+    public function paginateAll(int $perPage = 15, ?string $search = null, ?bool $isActive = null): LengthAwarePaginator
     {
         return Product::query()
+            ->when($search !== null && $search !== '', function (Builder $query) use ($search): void {
+                $query->where(function (Builder $subQuery) use ($search): void {
+                    $subQuery
+                        ->where('name', 'like', "%{$search}%")
+                        ->orWhere('sku', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%");
+                });
+            })
+            ->when($isActive !== null, function (Builder $query) use ($isActive): void {
+                $query->where('is_active', $isActive);
+            })
             ->orderByDesc('created_at')
             ->paginate($perPage);
     }
@@ -65,5 +85,12 @@ class ProductRepository implements ProductRepositoryInterface
     public function decrementStock(Product $product, int $quantity): void
     {
         $product->decrement('stock_quantity', $quantity);
+    }
+
+    public function updateStock(Product $product, int $stockQuantity): Product
+    {
+        $product->update(['stock_quantity' => $stockQuantity]);
+
+        return $product->refresh();
     }
 }

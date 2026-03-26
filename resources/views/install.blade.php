@@ -368,6 +368,7 @@
 
         <div id="progressBox" class="progress-container hidden">
             <div class="progress-title">
+                <span id="progressIcon">⚙️</span>
                 <span id="progressTitle">Installation en cours...</span>
             </div>
             <div id="progressStatus" class="progress-status">Initialisation...</div>

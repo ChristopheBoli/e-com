@@ -28,6 +28,8 @@ class ProductFactory extends Factory
             'price_cents' => fake()->numberBetween(1500, 250000),
             'stock_quantity' => fake()->numberBetween(0, 200),
             'is_active' => true,
+            'image' => null,
+            'image_url' => null,
         ];
     }
 }

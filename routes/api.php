@@ -44,6 +44,7 @@ Route::middleware('auth:api')->group(function (): void {
             Route::get('{id}', [ProductAdminController::class, 'show']);
             Route::post('/', [ProductAdminController::class, 'store']);
             Route::put('{id}', [ProductAdminController::class, 'update']);
+            Route::post('bulk-stock', [ProductAdminController::class, 'bulkUpdateStock']);
             Route::delete('{id}', [ProductAdminController::class, 'destroy']);
         });
     });

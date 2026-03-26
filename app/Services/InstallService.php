@@ -101,10 +101,9 @@ class InstallService
             'updated_at' => now()->toIso8601String(),
         ];
 
-        $isInstalled = filter_var(env('APP_INSTALLED', false), FILTER_VALIDATE_BOOL);
         $lockExists = file_exists(storage_path('app/install.lock'));
 
-        if ($isInstalled || $lockExists) {
+        if ($lockExists) {
             return array_merge($default, [
                 'state' => 'success',
                 'message' => 'Application déjà installée.',
@@ -396,10 +395,9 @@ class InstallService
 
     private function assertInstallAllowed(): void
     {
-        $isInstalled = filter_var(env('APP_INSTALLED', false), FILTER_VALIDATE_BOOL);
         $lockExists = file_exists(storage_path('app/install.lock'));
 
-        if ($isInstalled || $lockExists) {
+        if ($lockExists) {
             throw new RuntimeException('Application déjà installée.');
         }
 

@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Api\Concerns\ApiResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Product\ProductBulkStockUpdateRequest;
 use App\Http\Requests\Product\ProductStoreRequest;
 use App\Http\Requests\Product\ProductUpdateRequest;
 use App\Services\ProductService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use RuntimeException;
 
 class ProductAdminController extends Controller
@@ -19,10 +21,20 @@ class ProductAdminController extends Controller
     ) {
     }
 
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
+        $perPage = (int) $request->integer('per_page', 15);
+        $search = $request->string('search')->toString();
+        $status = $request->string('status')->toString();
+
+        $isActive = match ($status) {
+            'active' => true,
+            'inactive' => false,
+            default => null,
+        };
+
         return $this->success(
-            $this->productService->listAdmin(),
+            $this->productService->listAdmin($perPage, $search !== '' ? $search : null, $isActive),
             'Produits récupérés.'
         );
     }
@@ -54,6 +66,17 @@ class ProductAdminController extends Controller
             );
         } catch (RuntimeException $exception) {
             return $this->error($exception->getMessage(), null, 404);
+        }
+    }
+
+    public function bulkUpdateStock(ProductBulkStockUpdateRequest $request): JsonResponse
+    {
+        try {
+            $updated = $this->productService->bulkUpdateStock($request->validated('items'));
+
+            return $this->success($updated, 'Stocks mis à jour.');
+        } catch (RuntimeException $exception) {
+            return $this->error($exception->getMessage(), null, 422);
         }
     }
 

@@ -21,6 +21,8 @@ class Product extends Model
         'price_cents',
         'stock_quantity',
         'is_active',
+        'image',
+        'image_url',
     ];
 
     /**

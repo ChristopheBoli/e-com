@@ -26,6 +26,7 @@ class ProductUpdateRequest extends FormRequest
             'price_cents' => ['sometimes', 'integer', 'min:1'],
             'stock_quantity' => ['sometimes', 'integer', 'min:0'],
             'is_active' => ['sometimes', 'boolean'],
+            'image' => ['sometimes', 'nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
         ];
     }
 }
