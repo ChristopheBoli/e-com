@@ -17,6 +17,7 @@ Backend API Laravel 13 pour une application de gestion commerciale avec module p
 git clone https://github.com/ChristopheBoli/e-com.git
 cd e-com
 composer install
+npm install
 ```
 
 ### Méthode 2: Téléchargement direct
@@ -39,7 +40,6 @@ php artisan serve
 - Frontend
 
 ```bash
-npm install
 npm run dev
 
 # Build production
@@ -476,7 +476,6 @@ resources/js/
 # Dev (Laravel + Vite en parallèle, mieux avec 2 terminaux)
 php artisan serve (pour le backend)
 
-npm install
 npm run dev
 
 # Build production
