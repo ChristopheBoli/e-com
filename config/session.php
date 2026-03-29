@@ -18,7 +18,9 @@ return [
     |
     */
 
-    'driver' => env('SESSION_DRIVER', 'database'),
+    'driver' => filter_var(env('APP_INSTALLED', false), FILTER_VALIDATE_BOOL)
+        ? env('SESSION_DRIVER', 'database')
+        : 'file',
 
     /*
     |--------------------------------------------------------------------------
