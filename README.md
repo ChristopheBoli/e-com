@@ -1,4 +1,136 @@
-# API E-Commerce Laravel
+# E-Com – Fullstack E-Commerce Application
+
+Application e-commerce moderne développée avec Laravel 13 + React 18, intégrant un système de panier, checkout transactionnel, administration, authentification JWT et un installateur automatisé.
+
+![Preview](./docs/images/preview.png)
+
+## ⚡ TL;DR
+
+- Stack : Laravel 13 + React 18
+- Auth : JWT
+- Architecture : Service / Repository
+- Bonus : Installateur web + mode démo
+
+## Fonctionnalités clés
+- Checkout transactionnel sécurisé
+- Architecture scalable (Service / Repository)
+- Installateur web automatisé
+- Dashboard admin simple
+
+
+## Doc simple
+
+### Fonctionnalités principales
+
+#### Côté utilisateur
+- Consultation du catalogue produits
+- Détail produit
+- Gestion du panier (CRUD)
+- Checkout complet
+- Historique des commandes
+- Authentification JWT
+
+#### Côté administration
+- Dashboard avec statistiques
+- CRUD produits
+- Gestion des stocks (bulk)
+- Gestion des utilisateurs
+- Visualisation des commandes
+
+#### Technique
+- Architecture en couches (Service / Repository)
+- API REST sécurisée
+- Installateur web automatisé
+- Tests unitaires & feature
+- Gestion du panier optimisée
+- Transactions DB (checkout)
+
+#### Aperçu de l'application
+
+![Home](./docs/images/preview.png)
+![Product](./docs/images/products.png)
+![Cart](./docs/images/cart.png)
+![Checkout](./docs/images/checkout.png)
+![Dashboard](./docs/images/dashboard.png)
+
+### Stack technique
+
+#### Backend
+- Laravel 13
+- PHP 8.3
+- JWT Auth
+- MySQL / PostgreSQL / MariaDB / SQLite
+
+#### Frontend
+- React 18
+- Vite
+- React Query
+- Tailwind CSS
+
+### Installation rapide
+```bash
+git clone https://github.com/ChristopheBoli/e-com.git
+cd e-com
+
+cp .env.example .env
+composer install
+npm install
+
+php artisan serve
+
+# Ouvrir un autre terminal
+npm run dev
+```
+
+👉 Puis ouvrir :
+
+http://127.0.0.1:8000/install
+
+
+### Installateur Web
+
+L’application intègre un système d’installation automatisé :
+
+- Configuration DB via interface
+- Génération automatique des clés
+- Migrations + seeders
+- Création admin
+- Mode démo disponible
+
+### Sécurité
+- Authentification JWT
+- Middleware admin
+- Validation des requêtes
+- Protection SQL Injection (Eloquent)
+- Hash des mots de passe
+
+### Tests
+```bash
+php artisan test
+```
+
+17 tests
+85 assertions
+Couverture des flows critiques
+
+### Architecture
+Controllers → Services → Repositories → Models
+
+
+### Améliorations possibles
+- Intégration paiement réel (Stripe, etc.)
+- Cache Redis
+- Notifications (email)
+- CI/CD
+
+### Auteur
+
+Christophe BOLI
+
+
+## Doc avancée (Utile pour les développeurs)
+
+# Backend (Laravel API)
 
 Backend API Laravel 13 pour une application de gestion commerciale avec module panier/checkout, architecture en couches (Controllers, Services, Repositories, Models, Requests, Middleware), JWT auth, module admin, tests, seeders et installateur web.
 
@@ -16,6 +148,7 @@ Backend API Laravel 13 pour une application de gestion commerciale avec module p
 ```bash
 git clone https://github.com/ChristopheBoli/e-com.git
 cd e-com
+cp .env.example .env
 composer install
 npm install
 ```
@@ -29,7 +162,7 @@ Vous pouvez télécharger le fichier zip du projet depuis le repo GitHub et le d
 L'application propose un installateur web automatisé accessible via `/install`.
 
 1. **Lancez le serveur de développement:**
-# Dev (Laravel + Vite en parallèle, mieux avec 2 terminaux)
+### Dev (Laravel + Vite en parallèle, mieux avec 2 terminaux)
 
 - Backend
 
@@ -414,7 +547,7 @@ php artisan db:seed
 
 
 
-# E-com Frontend - React + Vite
+# Frontend (React SPA)
 
 L'application React est organisée selon les meilleures pratiques avec une séparation claire des responsabilités.
 
@@ -504,9 +637,9 @@ Défini dans `resources/js/App.jsx`:
 - Admin: `/admin`, `/admin/products`, `/admin/orders`, `/admin/revenue`, `/admin/customers`
 
 
-### Pannel d'administration
+### Panel d'administration
 
-- Il suffit de se connecter avec les accès administrateurs pour acceder aux pages d'administration.
+- Il suffit de se connecter avec les accès administrateurs pour accéder aux pages d'administration.
 
 
 ---
@@ -540,4 +673,4 @@ Ce projet est propriétaire. Tous droits réservés.
 
 ## Support
 
-Pour toute question ou problème de configuration, n'hésitez pas à me contactez.
+Pour toute question ou problème de configuration, n'hésitez pas à me contacter.
