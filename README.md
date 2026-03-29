@@ -4,7 +4,7 @@ Application e-commerce moderne développée avec Laravel 13 + React 18, intégra
 
 ![Preview](./docs/images/preview.png)
 
-## ⚡ TL;DR
+## TL;DR
 
 - Stack : Laravel 13 + React 18
 - Auth : JWT
