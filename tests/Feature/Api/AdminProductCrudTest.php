@@ -165,9 +165,9 @@ class AdminProductCrudTest extends TestCase
 
         $response = $this->withHeader('Authorization', "Bearer {$token}")
             ->post('/api/admin/products', [
-                'name' => 'Produit Image',
+                'name' => 'Article Image',
                 'sku' => 'SKU-IMG-001',
-                'description' => 'Produit avec image',
+                'description' => 'Article avec image',
                 'price_cents' => 55000,
                 'stock_quantity' => 10,
                 'is_active' => true,

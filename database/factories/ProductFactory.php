@@ -29,7 +29,7 @@ class ProductFactory extends Factory
             'stock_quantity' => fake()->numberBetween(0, 200),
             'is_active' => true,
             'image' => null,
-            'image_url' => null,
+            'image_url' => 'https://placehold.co/400x400/e2e8f0/64748b?text=' . urlencode($name),
         ];
     }
 }

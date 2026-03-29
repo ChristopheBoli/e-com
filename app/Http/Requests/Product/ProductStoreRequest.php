@@ -18,12 +18,33 @@ class ProductStoreRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            'sku' => ['required', 'string', 'max:100', 'unique:products,sku'],
+            'sku' => ['nullable', 'string', 'max:100', 'unique:products,sku'],
             'description' => ['nullable', 'string'],
             'price_cents' => ['required', 'integer', 'min:1'],
             'stock_quantity' => ['required', 'integer', 'min:0'],
-            'is_active' => ['sometimes', 'boolean'],
+            'is_active' => ['required', 'boolean'],
             'image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,webp', 'max:2048'],
         ];
+    }
+
+    /**
+     * Prepare inputs for validation - cast FormData values
+     */
+    protected function prepareForValidation(): void
+    {
+        $data = [
+            'name' => $this->input('name'),
+            'sku' => $this->input('sku'),
+            'description' => $this->input('description') ?? '',
+            'price_cents' => (int) $this->input('price_cents'),
+            'stock_quantity' => (int) $this->input('stock_quantity'),
+            'is_active' => $this->boolean('is_active'),
+        ];
+
+        if ($this->hasFile('image')) {
+            $data['image'] = $this->file('image');
+        }
+
+        $this->merge($data);
     }
 }

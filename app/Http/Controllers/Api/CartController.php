@@ -38,7 +38,7 @@ class CartController extends Controller
 
             return $this->success(
                 $this->cartService->addItem((int) $user->id, (int) $data['product_id'], (int) $data['quantity']),
-                'Produit ajouté au panier.'
+                'Article ajouté au panier.'
             );
         } catch (CartException $exception) {
             return $this->error($exception->getMessage(), null, 422);
@@ -68,7 +68,7 @@ class CartController extends Controller
 
             return $this->success(
                 $this->cartService->removeItem((int) $user->id, (int) $data['product_id']),
-                'Produit supprimé du panier.'
+                'Article supprimé du panier.'
             );
         } catch (CartException $exception) {
             return $this->error($exception->getMessage(), null, 422);

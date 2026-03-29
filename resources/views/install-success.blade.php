@@ -188,7 +188,7 @@
             <div class="badge">{{ $installMode === 'demo' ? 'Mode démo' : 'Installation simple' }}</div>
         </div>
 
-        <div class="cred-section">
+        <!-- <div class="cred-section">
             <h3>Compte administrateur</h3>
             <div class="cred-row">
                 <label>Email</label>
@@ -204,11 +204,11 @@
                     <button class="copy-btn" onclick="copyToClipboard('admin-password')">Copier</button>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         @if ($demoUserEnabled)
             <div class="cred-section">
-                <h3>Compte de démonstration</h3>
+                <h3>Compte utilisateur démo</h3>
                 <div class="cred-row">
                     <label>Email</label>
                     <div class="value">
@@ -233,14 +233,10 @@
 
         <div class="demo-info">
             <strong>Sécurité</strong>
-            <p>Pensez à changer le mot de passe administrateur après votre première connexion.</p>
+            <p>Pensez à changer les identifiants de démonstration après votre première connexion.</p>
         </div>
 
         <a href="{{ url('/') }}" class="button" style="margin-top: 24px;">Ouvrir l'application →</a>
-
-        <p style="text-align: center; color: #718096; font-size: 12px; margin-top: 24px;">
-            Ces identifiants ne s'afficheront plus. Sauvegardez-les maintenant.
-        </p>
     </div>
 
     <script>

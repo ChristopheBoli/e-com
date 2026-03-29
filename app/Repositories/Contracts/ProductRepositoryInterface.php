@@ -30,4 +30,6 @@ interface ProductRepositoryInterface
     public function decrementStock(Product $product, int $quantity): void;
 
     public function updateStock(Product $product, int $stockQuantity): Product;
+
+    public function skuExists(string $sku, ?int $excludeId = null): bool;
 }

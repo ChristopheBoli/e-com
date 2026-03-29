@@ -41,14 +41,14 @@ class CartService
         $product = $this->products->findActiveById($productId);
 
         if (! $product) {
-            throw new CartException('Produit introuvable ou inactif.');
+            throw new CartException('Article introuvable ou inactif.');
         }
 
         $item = $this->carts->findItemByProductId($cart->id, $product->id);
         $newQuantity = ($item?->quantity ?? 0) + $quantity;
 
         if ($newQuantity > $product->stock_quantity) {
-            throw new CartException('Stock insuffisant pour ce produit.');
+            throw new CartException('Stock insuffisant pour ce article.');
         }
 
         if (! $item) {
@@ -79,17 +79,17 @@ class CartService
         $item = $this->carts->findItemByProductId($cart->id, $productId);
 
         if (! $item) {
-            throw new CartException('Produit absent du panier.');
+            throw new CartException('Article absent du panier.');
         }
 
         $product = $this->products->findById($productId);
 
         if (! $product || ! $product->is_active) {
-            throw new CartException('Produit introuvable ou inactif.');
+            throw new CartException('Article introuvable ou inactif.');
         }
 
         if ($quantity > $product->stock_quantity) {
-            throw new CartException('Stock insuffisant pour ce produit.');
+            throw new CartException('Stock insuffisant pour ce article.');
         }
 
         $item->quantity = $quantity;
@@ -109,7 +109,7 @@ class CartService
         $item = $this->carts->findItemByProductId($cart->id, $productId);
 
         if (! $item) {
-            throw new CartException('Produit absent du panier.');
+            throw new CartException('Article absent du panier.');
         }
 
         $this->carts->removeItem($item);
@@ -138,6 +138,9 @@ class CartService
                 'product_id' => $item->product_id,
                 'name' => $product?->name,
                 'sku' => $product?->sku,
+                'image_url' => $product?->image_url,
+                'stock_quantity' => $product?->stock_quantity,
+                'is_active' => $product?->is_active,
                 'quantity' => $item->quantity,
                 'unit_price_cents' => $item->unit_price_cents,
                 'line_total_cents' => $item->line_total_cents,

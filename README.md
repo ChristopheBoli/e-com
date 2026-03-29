@@ -28,15 +28,28 @@ Vous pouvez télécharger le fichier zip du projet depuis le repo GitHub et le d
 L'application propose un installateur web automatisé accessible via `/install`.
 
 1. **Lancez le serveur de développement:**
+# Dev (Laravel + Vite en parallèle, mieux avec 2 terminaux)
+
+- Backend
 
 ```bash
 php artisan serve
 ```
 
+- Frontend
+
+```bash
+npm install
+npm run dev
+
+# Build production
+npm run build
+```
+
 2. **Accédez à la page d'installation:**
 
 ```
-http://localhost:8000/install
+http://127.0.0.1:8000/install
 ```
 
 3. **Remplissez le formulaire:**
@@ -91,7 +104,7 @@ APP_NAME=E-com
 APP_ENV=local
 APP_KEY=
 APP_DEBUG=true
-APP_URL=http://localhost:8000
+APP_URL=http://127.0.0.1:8000
 
 # Base de données
 DB_CONNECTION=mysql
@@ -137,7 +150,7 @@ Pour utiliser l'installateur web, configurez ces variables dans `.env`:
 
 Une route `/reset-install` permet de réinitialiser l'installation pour effectuer des tests ou réinstaller l'application.
 
-**Accès:** `http://localhost:8000/reset-install`
+**Accès:** `http://127.0.0.1:8000/reset-install`
 
 **Fonctionnalités:**
 
@@ -160,8 +173,8 @@ RESET_ALLOWED_IN_PRODUCTION=true
 Après installation en mode démo, ces identifiants sont disponibles sur la page `/install/done`:
 
 - **Administrateur:**
-  - Email: `admin@example.com` (ou email saisi)
-  - Mot de passe: `adminpassword` (ou mot de passe saisi)
+  - Email: `email saisi lors de l'installation`
+  - Mot de passe: `mot de passe saisi lors de l'installation`
 
 - **Utilisateur Démo:**
   - Email: `user@example.com`
@@ -238,7 +251,7 @@ ecom/
 │   └── seeders/             # Données de démonstration
 ├── resources/
 │   ├── views/                # Templates Blade
-│   └── ...
+│   └── ... (frontend)
 ├── routes/
 │   ├── api.php               # Routes API
 │   └── web.php               # Routes Web
@@ -399,6 +412,106 @@ php artisan route:list
 php artisan db:seed
 ```
 
+
+
+# E-com Frontend - React + Vite
+
+L'application React est organisée selon les meilleures pratiques avec une séparation claire des responsabilités.
+
+Le frontend SPA est situé dans `resources/js` et utilise React 18, React Router et React Query pour consommer l’API Laravel (`/api`).
+
+### Stack frontend
+
+- React 18 (`react`, `react-dom`)
+- Vite 6 (`vite`, `@vitejs/plugin-react`, `laravel-vite-plugin`)
+- React Router (`react-router-dom`)
+- React Query (`@tanstack/react-query`)
+- Axios (client HTTP avec intercepteurs JWT)
+- Tailwind CSS + PostCSS (`tailwindcss`, `autoprefixer`, `postcss`)
+- Icônes Lucide (`lucide-react`)
+
+## Couleurs
+
+- **Primary**: Bleu (#3b82f6)
+- **Error**: Rouge (#ef4444)
+- **Success**: Vert (#22c55e)
+- **Warning**: Orange (#f97316)
+- **Background**: Gris clair (#f8fafc)
+- **Surface**: Blanc (#ffffff)
+
+
+## Responsive Design
+
+L'application est entièrement responsive avec des breakpoints :
+- Mobile: par défaut
+- Tablette: `sm:` (640px+)
+- Desktop: `md:` (768px+)
+- Large: `lg:` (1024px+)
+- Extra large: `xl:` (1280px+)
+
+### Arborescence frontend
+
+```text
+resources/js/
+├── App.jsx                     # Déclaration des routes
+├── main.jsx                    # Point d’entrée React
+├── components/
+│   ├── shared/                 # Layout/Header/Footer/ProtectedRoute/AdminRoute
+│   └── ui/                     # Composants UI (cards, modal, drawer, skeletons...)
+├── contexts/                   # AuthContext, CartContext
+├── hooks/                      # Hooks React Query (products, orders, users)
+├── pages/
+│   ├── admin/                  # Dashboard, produits, commandes, clients, revenus
+│   ├── auth/                   # Login/Register
+│   ├── shop/                   # Home, ProductList, ProductDetail, Cart, Checkout
+│   └── account/                # Compte et historique commandes
+└── utils/
+    ├── api.js                  # Services Axios (auth, products, admin...)
+    └── cn.js                   # Helpers d’UI/formatage
+```
+
+### Démarrage frontend
+
+```bash
+# Dev (Laravel + Vite en parallèle, mieux avec 2 terminaux)
+php artisan serve (pour le backend)
+
+npm install
+npm run dev
+
+# Build production
+npm run build
+```
+
+### Communication frontend/backend
+
+- Base URL API: `VITE_API_URL` (sinon fallback `/api`) dans `resources/js/utils/api.js`
+- Token JWT stocké en localStorage (`jwt_token`)
+- Intercepteur request: injecte `Authorization: Bearer <token>`
+- Intercepteur response: déclenche `auth:unauthorized` en cas de 401
+
+Exemple `.env` côté frontend:
+
+```env
+VITE_API_URL=http://localhost:8000/api
+```
+
+### Routing principal frontend
+
+Défini dans `resources/js/App.jsx`:
+
+- Public: `/`, `/shop`, `/shop/:id`, `/login`, `/register`, `/terms`, `/privacy`, `/contact`
+- User connecté: `/cart`, `/checkout`, `/account`, `/orders`, `/order/success`
+- Admin: `/admin`, `/admin/products`, `/admin/orders`, `/admin/revenue`, `/admin/customers`
+
+
+### Pannel d'administration
+
+- Il suffit de se connecter avec les accès administrateurs pour acceder aux pages d'administration.
+
+
+---
+
 ## Dépannage
 
 ### Problème d'installation
@@ -429,51 +542,3 @@ Ce projet est propriétaire. Tous droits réservés.
 ## Support
 
 Pour toute question ou problème de configuration, n'hésitez pas à me contactez.
-
-
- ❌ Ce qui manque selon votre document
-
-  1. Module Administration complet
-
-  Le document demande:
-  - POST /admin/products - Manquant (existe mais peut-être incomplet)
-  - PUT /admin/products/{id} - Manquant
-  - DELETE /admin/products/{id} - Manquant
-
-  2. Système de notifications
-
-  Le document mentionne "Email notifications" qui n'existent pas.
-
-  3. Recherche/filtrage
-
-  Le document mentionne "Search/Filtering" avancé (aujourd'hui pagination simple).
-
-  4. Images de produits
-
-  Le document mentionne "Product image upload" qui n'existe pas.
-
-
-
-   2026-03-26 14:12:43 /reset-install ............................................................................... ~ 0.23ms
-  2026-03-26 14:12:43 /favicon.ico ................................................................................. ~ 0.22ms
-  local.INFO: [reset] start {"reset_id":"8925005c-8d02-4b07-a577-3a72bfd3e979","expects_json":false,"drop_database":"1"}
-  local.INFO: [reset] run_start
-  local.INFO: [reset] step_drop_tables
-  local.INFO: [reset] tables_dropped_and_cleaned
-  local.INFO: [reset] step_delete_locks
-  local.INFO: [reset] locks_deleted {"files":["install.lock","install-status.json"]}
-  local.INFO: [reset] step_reset_env
-  local.INFO: [reset] env_reset
-  local.INFO: [reset] step_clear_cache
-
-   INFO  Environment modified. Restarting server...  
-
-   INFO  Server running on [http://127.0.0.1:8000].  
-
-  Press Ctrl+C to stop the server
-
-
-  L'install auto doit aussi faire le storage link
-
-    feat(app): Système d'installation:
-  - Ajouter storage:link automatique pendant l'installation

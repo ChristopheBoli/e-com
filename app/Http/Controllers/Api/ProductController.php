@@ -24,7 +24,7 @@ class ProductController extends Controller
 
         return $this->success(
             $this->productService->listPublic($perPage, $search !== '' ? $search : null),
-            'Produits actifs récupérés.'
+            'Articles actifs récupérés.'
         );
     }
 
@@ -33,9 +33,9 @@ class ProductController extends Controller
         $product = $this->productService->showPublic($id);
 
         if (! $product) {
-            return $this->error('Produit introuvable.', null, 404);
+            return $this->error('Article introuvable.', null, 404);
         }
 
-        return $this->success($product, 'Produit récupéré.');
+        return $this->success($product, 'Article récupéré.');
     }
 }

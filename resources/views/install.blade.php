@@ -348,7 +348,7 @@
                                 <option value="demo" @selected($defaultInstallMode === 'demo')>Mode démo (avec données de test)</option>
                                 <option value="simple" @selected($defaultInstallMode === 'simple')>Installation simple (vide)</option>
                             </select>
-                            <p class="hint">Le mode démo ajoute des produits de test et un utilisateur de démonstration.</p>
+                            <p class="hint">Le mode démo ajoute des articles de test et un utilisateur de démonstration.</p>
                         </div>
                     </div>
 

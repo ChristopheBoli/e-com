@@ -1,11 +1,15 @@
 <?php
 
+use App\Http\Controllers\Api\Admin\DashboardController;
+use App\Http\Controllers\Api\Admin\OrderAdminController;
 use App\Http\Controllers\Api\Admin\ProductAdminController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\CheckoutController;
+use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ProductController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\Admin\UserAdminController;
 
 Route::prefix('auth')->group(function (): void {
     Route::post('register', [AuthController::class, 'register']);
@@ -37,8 +41,14 @@ Route::middleware('auth:api')->group(function (): void {
     });
 
     Route::post('checkout', [CheckoutController::class, 'checkout']);
+    Route::get('orders', [OrderController::class, 'index']);
 
     Route::prefix('admin')->middleware('admin')->group(function (): void {
+        Route::get('dashboard', [DashboardController::class, 'index']);
+        Route::get('orders', [OrderAdminController::class, 'index']);
+
+        Route::apiResource('users', UserAdminController::class);
+
         Route::prefix('products')->group(function (): void {
             Route::get('/', [ProductAdminController::class, 'index']);
             Route::get('{id}', [ProductAdminController::class, 'show']);

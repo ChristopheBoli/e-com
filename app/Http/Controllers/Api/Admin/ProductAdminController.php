@@ -35,7 +35,7 @@ class ProductAdminController extends Controller
 
         return $this->success(
             $this->productService->listAdmin($perPage, $search !== '' ? $search : null, $isActive),
-            'Produits récupérés.'
+            'Articles récupérés.'
         );
     }
 
@@ -44,26 +44,25 @@ class ProductAdminController extends Controller
         $product = $this->productService->showAdmin($id);
 
         if (! $product) {
-            return $this->error('Produit introuvable.', null, 404);
+            return $this->error('Article introuvable.', null, 404);
         }
 
-        return $this->success($product, 'Produit récupéré.');
+        return $this->success($product, 'Article récupéré.');
     }
 
     public function store(ProductStoreRequest $request): JsonResponse
     {
         $product = $this->productService->create($request->validated());
 
-        return $this->success($product, 'Produit créé.', 201);
+        return $this->success($product, 'Article créé.', 201);
     }
 
     public function update(ProductUpdateRequest $request, int $id): JsonResponse
     {
         try {
-            return $this->success(
-                $this->productService->update($id, $request->validated()),
-                'Produit mis à jour.'
-            );
+            $result = $this->productService->update($id, $request->validated());
+
+            return $this->success($result, 'Article mis à jour.');
         } catch (RuntimeException $exception) {
             return $this->error($exception->getMessage(), null, 404);
         }
@@ -85,7 +84,7 @@ class ProductAdminController extends Controller
         try {
             $this->productService->delete($id);
 
-            return $this->success(null, 'Produit supprimé.');
+            return $this->success(null, 'Article supprimé.');
         } catch (RuntimeException $exception) {
             return $this->error($exception->getMessage(), null, 404);
         }

@@ -93,4 +93,14 @@ class ProductRepository implements ProductRepositoryInterface
 
         return $product->refresh();
     }
+
+    public function skuExists(string $sku, ?int $excludeId = null): bool
+    {
+        return Product::query()
+            ->where('sku', $sku)
+            ->when($excludeId !== null, function ($query) use ($excludeId) {
+                $query->where('id', '!=', $excludeId);
+            })
+            ->exists();
+    }
 }

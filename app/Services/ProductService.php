@@ -55,6 +55,22 @@ class ProductService
     public function create(array $data): array
     {
         $data['slug'] = Str::slug((string) $data['name']);
+
+        // Générer automatiquement un SKU si non fourni
+        if (empty($data['sku'])) {
+            $baseSku = strtoupper(substr(preg_replace('/[^a-zA-Z0-9]/', '', $data['name']), 0, 8));
+            $suffix = 1;
+            $uniqueSku = $baseSku;
+
+            // S'assurer que le SKU est unique
+            while ($this->products->skuExists($uniqueSku)) {
+                $suffix++;
+                $uniqueSku = $baseSku . $suffix;
+            }
+
+            $data['sku'] = $uniqueSku;
+        }
+
         $data['is_active'] = (bool) ($data['is_active'] ?? true);
 
         $this->attachImagePayload($data);
@@ -78,9 +94,26 @@ class ProductService
             $data['slug'] = Str::slug((string) $data['name']);
         }
 
+        // Générer automatiquement un SKU si vide ou null
+        if (array_key_exists('sku', $data) && empty($data['sku'])) {
+            $baseSku = strtoupper(substr(preg_replace('/[^a-zA-Z0-9]/', '', $data['name'] ?? $product->name), 0, 8));
+            $suffix = 1;
+            $uniqueSku = $baseSku;
+
+            // S'assurer que le SKU est unique (en excluant le produit actuel)
+            while ($this->products->skuExists($uniqueSku, $id)) {
+                $suffix++;
+                $uniqueSku = $baseSku . $suffix;
+            }
+
+            $data['sku'] = $uniqueSku;
+        }
+
         $this->attachImagePayload($data, $product);
 
-        return $this->transformProduct($this->products->update($product, $data));
+        $updated = $this->products->update($product, $data);
+
+        return $this->transformProduct($updated);
     }
 
     /**
